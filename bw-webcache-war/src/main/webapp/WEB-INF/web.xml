@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+         http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+         version="2.4">
+  <display-name>Timezones server</display-name>
+
+  <!-- Do not alter or move  the following comment -->
+  <!-- add context params here -->
+
+  <!-- Do not alter or move  the following comment -->
+  <!-- add listeners here -->
+
+  <servlet>
+    <servlet-name>action</servlet-name>
+    <servlet-class>
+      org.bedework.webcache.server.WebCacheServer
+    </servlet-class>
+    <init-param>
+      <param-name>target</param-name>
+      <param-value>http://localhost:8080</param-value>
+    </init-param>
+    <init-param>
+      <param-name>targetContext</param-name>
+      <param-value>/feeder</param-value>
+    </init-param>
+
+    <load-on-startup>1</load-on-startup>
+
+  </servlet>
+
+  <!-- Do not alter or move  the following comment -->
+  <!-- add servlet definitions here -->
+
+  <servlet-mapping>
+    <servlet-name>action</servlet-name>
+    <url-pattern>/*</url-pattern>
+  </servlet-mapping>
+
+  <!-- Do not alter or move  the following comment -->
+  <!-- add servlet mappings here -->
+
+  <session-config>
+    <session-timeout>1</session-timeout>
+  </session-config>
+</web-app>
