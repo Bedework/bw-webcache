@@ -13,10 +13,43 @@ import java.nio.charset.StandardCharsets;
  * User: mike Date: 3/11/22 Time: 22:00
  */
 public class FeedModel {
+  public static URI getUri(final ParsedRequest preq,
+                           final Configuration config) {
+    switch (preq.getAction()) {
+      case "icsDays": {
+        return buildIcsDays(preq, config);
+      }
+      case "jsonDays": {
+        return buildJsonDays(preq, config);
+      }
+      case "rssDays": {
+        return buildRssDays(preq, config);
+      }
+      default:
+        throw new RuntimeException("Unsupported action: " + preq.getAction());
+    }
+  }
+
+  public static String getContentType(final ParsedRequest preq) {
+    switch (preq.getAction()) {
+      case "icsDays": {
+        return "text/calendar; charset=UTF-8";
+      }
+      case "jsonDays": {
+        return "application/javascript; charset=UTF-8";
+      }
+      case "rssDays": {
+        return "application/rss+xml; charset=UTF-8";
+      }
+      default:
+        throw new RuntimeException("Unsupported action: " + preq.getAction());
+    }
+  }
+
   public static URI buildIcsDays(final ParsedRequest preq,
                                  final Configuration config) {
     try {
-      final URIBuilder bldr = getUri(preq, config);
+      final URIBuilder bldr = getCommon(preq, config);
 
       bldr.addParameter("format",
                         "text/calendar");
@@ -30,7 +63,7 @@ public class FeedModel {
   public static URI buildJsonDays(final ParsedRequest preq,
                                   final Configuration config) {
     try {
-      final URIBuilder bldr = getUri(preq, config);
+      final URIBuilder bldr = getCommon(preq, config);
 
       if (!"no--object".equals(preq.getObjname())) {
         bldr.addParameter("setappvar",
@@ -49,7 +82,7 @@ public class FeedModel {
   public static URI buildRssDays(final ParsedRequest preq,
                                   final Configuration config) {
     try {
-      final URIBuilder bldr = getUri(preq, config);
+      final URIBuilder bldr = getCommon(preq, config);
 
       bldr.addParameter("skinName",
                         getSkin(preq.getSkin()));
@@ -60,8 +93,8 @@ public class FeedModel {
     }
   }
 
-  private static URIBuilder getUri(final ParsedRequest preq,
-                                   final Configuration config) {
+  private static URIBuilder getCommon(final ParsedRequest preq,
+                                      final Configuration config) {
     try {
       final URIBuilder bldr = new URIBuilder(
               config.getTarget() +

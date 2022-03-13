@@ -18,9 +18,20 @@
 */
 package org.bedework.webcache.server;
 
-import org.bedework.webcache.common.Configuration;
-import org.bedework.webcache.common.ParsedRequest;
 import org.bedework.webcache.common.Client;
+import org.bedework.webcache.common.Configuration;
+import org.bedework.webcache.common.FeedModel;
+import org.bedework.webcache.common.ParsedRequest;
+
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.StatusLine;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.InputStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -52,7 +63,44 @@ public class GetMethod extends MethodBase {
     }
 
     try {
-      final Client theTarget = new Client(config.getTarget());
+      final HttpGet get = new HttpGet(FeedModel.getUri(preq, config));
+      get.addHeader("content-type", FeedModel.getContentType(preq));
+
+      try (final CloseableHttpResponse targetResp = Client.getClient()
+                                                    .execute(get)) {
+        final StatusLine status = targetResp.getStatusLine();
+        if ((status.getStatusCode() / 100) != 2) {
+          resp.setStatus(status.getStatusCode());
+          return;
+        }
+
+        final Header ctype = targetResp.getFirstHeader("content-type");
+
+        if (ctype == null) {
+          resp.setHeader("content-type",
+                         FeedModel.getContentType(preq));
+        } else {
+          resp.setHeader("content-type", ctype.getValue());
+        }
+
+        final HttpEntity targetEntity = targetResp.getEntity();
+        resp.setContentLengthLong(targetEntity.getContentLength());
+
+        try (final InputStream targetStream = targetEntity.getContent()) {
+          final BufferedInputStream bis = new BufferedInputStream(targetStream);
+          final BufferedOutputStream bos = new BufferedOutputStream(resp.getOutputStream());
+
+          int i;
+          while ((i = bis.read()) != -1) {
+            bos.write(i);
+          }
+
+          bos.flush();
+          bos.close();
+          bis.close();
+        }
+      }
+      resp.setStatus(HttpServletResponse.SC_OK);
     } catch (final Throwable t){
       resp.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
       return;

@@ -11,12 +11,13 @@ import javax.servlet.http.HttpServletRequest;
  * User: mike Date: 3/11/22 Time: 22:18
  */
 public class ParsedRequest {
-  boolean valid;
+  private boolean valid;
 
-  int days;
-  String skin;
-  String objname;
-  String filter;
+  private String action;
+  private int days;
+  private String skin;
+  private String objname;
+  private String filter;
 
   public ParsedRequest(final HttpServletRequest req) {
     try {
@@ -26,14 +27,15 @@ public class ParsedRequest {
         return;
       }
 
-      final String[] pathEls = path.substring(1).split("/");
+      final String[] pathEls = path.trim().substring(1).split("/");
       if (pathEls.length < 2) {
         return;
       }
 
-      switch (pathEls[1]) {
+      action = pathEls[1];
+      switch (action) {
         case "icsDays": {
-          if (pathEls.length != 5) {
+          if (pathEls.length != 4) {
             return;
           }
 
@@ -61,7 +63,7 @@ public class ParsedRequest {
           break;
         }
         case "rssDays": {
-          if (pathEls.length != 6) {
+          if (pathEls.length != 5) {
             return;
           }
 
@@ -82,6 +84,10 @@ public class ParsedRequest {
     } catch (final Throwable t) {
       valid = false;
     }
+  }
+
+  public String getAction() {
+    return action;
   }
 
   public boolean isValid() {

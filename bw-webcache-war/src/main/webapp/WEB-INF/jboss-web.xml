@@ -3,4 +3,6 @@
 <jboss-web>
   <!-- Virtual host -->
 
+  <context-root>/webcache</context-root>
+
 </jboss-web>
