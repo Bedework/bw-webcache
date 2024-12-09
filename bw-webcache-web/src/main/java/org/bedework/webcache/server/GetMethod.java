@@ -51,7 +51,7 @@ public class GetMethod extends MethodBase {
 
   @Override
   public void doMethod(final HttpServletRequest req,
-                       final HttpServletResponse resp) throws ServletException {
+                       final HttpServletResponse resp) {
     final ParsedRequest preq = new ParsedRequest(req);
     if (!preq.isValid()) {
       resp.setStatus(HttpServletResponse.SC_EXPECTATION_FAILED);
@@ -59,7 +59,7 @@ public class GetMethod extends MethodBase {
     }
 
     if (debug()) {
-      debug("GetMethod: doMethod  preq=" + preq.toString());
+      debug("GetMethod: doMethod  preq=" + preq);
     }
 
     try {

@@ -23,7 +23,6 @@ import org.bedework.util.logging.Logged;
 import org.bedework.util.servlet.HttpServletUtils;
 import org.bedework.webcache.common.Configuration;
 
-import java.io.IOException;
 import java.util.Enumeration;
 
 import javax.servlet.ServletConfig;
@@ -48,7 +47,7 @@ public class
 WebCacheServer extends HttpServlet
         implements Logged {
   protected boolean dumpContent;
-  private Configuration configuration = new Configuration();
+  private final Configuration configuration = new Configuration();
 
   @Override
   public void init(final ServletConfig config) throws ServletException {
@@ -67,7 +66,7 @@ WebCacheServer extends HttpServlet
 
   @Override
   protected void service(final HttpServletRequest req,
-                         final HttpServletResponse resp) throws ServletException, IOException {
+                         final HttpServletResponse resp) throws ServletException {
     try {
       final String methodName = req.getMethod();
 
@@ -96,7 +95,6 @@ WebCacheServer extends HttpServlet
    *
    * @param req http request
    */
-  @SuppressWarnings("unchecked")
   public void dumpRequest(final HttpServletRequest req) {
     try {
       String title = "Request headers";
