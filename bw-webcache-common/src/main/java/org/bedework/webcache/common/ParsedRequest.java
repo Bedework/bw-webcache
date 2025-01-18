@@ -3,7 +3,7 @@
 */
 package org.bedework.webcache.common;
 
-import org.bedework.util.misc.ToString;
+import org.bedework.base.ToString;
 
 import javax.servlet.http.HttpServletRequest;
 
