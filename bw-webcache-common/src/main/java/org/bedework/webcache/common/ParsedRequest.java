@@ -5,7 +5,7 @@ package org.bedework.webcache.common;
 
 import org.bedework.base.ToString;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * User: mike Date: 3/11/22 Time: 22:18

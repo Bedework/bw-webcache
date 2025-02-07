@@ -23,9 +23,9 @@ import org.bedework.util.logging.Logged;
 import org.bedework.webcache.common.Configuration;
 import org.bedework.webcache.common.WebCacheUtil;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * @author douglm
