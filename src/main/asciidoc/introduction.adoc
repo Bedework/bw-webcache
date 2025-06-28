@@ -1,0 +1,5 @@
+[[webcache]]
+== Webcache
+Proxy to bedework feeder requests which may (eventually) act as a cache.
+
+Currently used to serve old style feed requests for sites that still use them.
